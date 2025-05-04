@@ -26,15 +26,24 @@ export default function SingleUI() {
     setError('');
     setOutput(null);
     try {
-      const rows = parseTSV(tsvData);
+      let raw = tsvData;
+  
+      // Fix for test input formatting: convert 2+ spaces to tabs
+      if (!raw.includes('\t') && raw.match(/  +/)) {
+        raw = raw.replace(/ {2,}/g, '\t');
+      }
+  
+      const rows = parseTSV(raw);
+      console.log('Parsed TSV:', rows);
       if (!rows.length) throw new Error('No data parsed.');
       state.set('parsedData', rows);
       const loi = generateLOI(rows[0], offerType, toneStyle);
-      setOutput(loi.body); // Clean string, no HTML
+      setOutput(loi.body);
     } catch (err) {
       setError(err.message);
     }
   };
+  
 
   const handleOfferTypeChange = (e) => {
     const selected = e.target.value;

@@ -1,5 +1,7 @@
 // jest.setup.js
 
+require('@testing-library/jest-dom');
+
 // 1) Ensure jest.fn is available
 if (typeof jest === 'undefined') {
   global.jest = require('jest-mock');

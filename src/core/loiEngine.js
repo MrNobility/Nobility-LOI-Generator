@@ -26,9 +26,8 @@ function applyTemplate(template, data) {
  * @returns {{ text: string, html: string }}
  */
 export function generateLOI(data, offerType, toneStyle) {
-  // 1) Guard: require a non-empty data array
-  if (!Array.isArray(data) || data.length === 0) {
-    throw new Error('generateLOI: data array must be non-empty');
+  if (!data || typeof data !== 'object') {
+    throw new Error('generateLOI: input must be a non-empty object');
   }
   const tone = getToneConfig(offerType, toneStyle);
 
@@ -48,7 +47,7 @@ export function generateLOI(data, offerType, toneStyle) {
     body,
     '',
     closing,
-    signature
+    signture
   ].join('\n');
 
   // Assemble HTML (simple tags; you can expand with styling later)
