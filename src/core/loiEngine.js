@@ -47,7 +47,7 @@ export function generateLOI(data, offerType, toneStyle) {
     body,
     '',
     closing,
-    signture
+    signature
   ].join('\n');
 
   // Assemble HTML (simple tags; you can expand with styling later)
