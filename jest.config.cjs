@@ -1,20 +1,13 @@
-// jest.config.cjs
 module.exports = {
-  // Use JSDOM
-  testEnvironment: 'jest-environment-jsdom',
-
-  // Polyfills loaded before anything else
-  setupFiles: ['<rootDir>/jest.setup.js'],
+  testEnvironment: 'jsdom',
   setupFilesAfterEnv: ['<rootDir>/jest.setupAfterEnv.js'],
-
-  // (Optional) If you need global hooks, can also load after env:
-  // setupFilesAfterEnv: ['<rootDir>/jest.setupAfterEnv.js'],
-
+  moduleFileExtensions: ['js', 'jsx', 'json', 'node'],
   transform: {
-    '^.+\\.js$': 'babel-jest'
+    '^.+\\.(js|jsx)$': 'babel-jest',
   },
-
-  moduleFileExtensions: ['js', 'json'],
-  collectCoverage: true,
-  coverageDirectory: 'coverage'
+  testMatch: [
+    '**/tests/**/*.test.js',
+    '**/tests/**/*.test.jsx'
+  ],
+  coveragePathIgnorePatterns: ['/node_modules/'],
 };

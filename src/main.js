@@ -1,11 +1,13 @@
-// src/main.js
-
-// Import and initialize the single‐deal UI
-import { initSingleUI } from './ui/singleUI.js';
-
-// (Later, you can import and call initBulkUI from './ui/bulkUI.js')
+import React from 'react';
+import { createRoot } from 'react-dom/client';
+import SingleUI from './ui/singleUI.jsx';
 
 document.addEventListener('DOMContentLoaded', () => {
-  // Kick off the single‐deal form in the <div id="app"></div>
-  initSingleUI('app');
+  const container = document.getElementById('app');
+  if (container) {
+    const root = createRoot(container);
+    root.render(<SingleUI />);
+  } else {
+    console.error('#app container not found');
+  }
 });

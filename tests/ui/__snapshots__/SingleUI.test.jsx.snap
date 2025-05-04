@@ -1,0 +1,70 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`SingleUI component matches snapshot 1`] = `
+<div>
+  <div>
+    <h3>
+      Single Deal
+    </h3>
+    <form
+      class="single-form"
+    >
+      <label
+        for="single-offerType"
+      >
+        Offer Type
+      </label>
+      <select
+        id="single-offerType"
+        name="single-offerType"
+      >
+        <option
+          value="cash"
+        >
+          Cash Offer
+        </option>
+        <option
+          value="sellerFinance"
+        >
+          Seller Finance Offer
+        </option>
+      </select>
+      <label
+        for="single-toneStyle"
+      >
+        Tone Style
+      </label>
+      <select
+        id="single-toneStyle"
+        name="single-toneStyle"
+      >
+        <option
+          value="professional"
+        >
+          professional
+        </option>
+      </select>
+      <label
+        for="single-tsvData"
+      >
+        Deal Data (TSV)
+      </label>
+      <textarea
+        class="tsv-input"
+        id="single-tsvData"
+        name="single-tsvData"
+        placeholder="Paste single-row TSV here (headers on first line)"
+        rows="8"
+      />
+      <button
+        type="button"
+      >
+        Generate LOI
+      </button>
+    </form>
+    <div
+      id="single-loiResult"
+    />
+  </div>
+</div>
+`;

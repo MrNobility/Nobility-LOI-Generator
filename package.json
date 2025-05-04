@@ -19,10 +19,13 @@
     "devDependencies": {
         "@babel/core": "^7.27.1",
         "@babel/preset-env": "^7.27.1",
+        "@babel/preset-react": "^7.27.1",
         "@rollup/plugin-commonjs": "^23.0.0",
         "@rollup/plugin-json": "^6.1.0",
         "@rollup/plugin-node-resolve": "^15.0.0",
         "@rollup/plugin-terser": "^0.4.4",
+        "@testing-library/jest-dom": "^6.6.3",
+        "@testing-library/react": "^16.3.0",
         "babel-jest": "^29.7.0",
         "eslint": "^8.0.0",
         "husky": "^8.0.0",
@@ -30,6 +33,7 @@
         "jest-environment-jsdom": "^29.7.0",
         "lint-staged": "^13.0.0",
         "prettier": "^3.0.0",
+        "react-test-renderer": "^19.1.0",
         "rollup": "^3.0.0"
     }
 }
