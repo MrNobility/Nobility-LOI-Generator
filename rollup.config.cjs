@@ -1,7 +1,8 @@
 // rollup.config.cjs
 const postcss      = require('rollup-plugin-postcss');
 const json         = require('@rollup/plugin-json');
-const { nodeResolve } = require('@rollup/plugin-node-resolve');
+// Use the default export for node-resolve
+const resolve = require('@rollup/plugin-node-resolve').nodeResolve;
 const commonjs     = require('@rollup/plugin-commonjs');
 const { babel }    = require('@rollup/plugin-babel');
 const terser       = require('@rollup/plugin-terser').default;
@@ -40,7 +41,7 @@ module.exports = {
     nodeGlobals(),
     json(),
     // Resolve .jsx extensions
-    nodeResolve({
+    resolve({
       browser: true,
       preferBuiltins: false,
       extensions: ['.mjs', '.js', '.jsx', '.json']
