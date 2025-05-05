@@ -4,8 +4,11 @@ export const columnOrder = [
   'purchaseprice',
   'listedprice',
   'oflistprice',
+  'downpayment',
+  'interestrate',
   'monthlypaymentpiti',
   'balloonterm',
+  'amortization',
   'monthlyinsurance',
   'monthlytaxes',
   'monthlyhoa',
@@ -29,7 +32,3 @@ export const columnOrder = [
   'dealname',
   'pipeline',
 ];
-
-export const columnMap = Object.fromEntries(
-  columnOrder.map((col) => [col.replace(/[^a-z]/gi, '').toLowerCase(), col])
-);

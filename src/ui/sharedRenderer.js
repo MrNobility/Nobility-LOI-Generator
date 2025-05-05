@@ -83,14 +83,18 @@ export function createButton(text, onClick, type = 'button') {
 }
 
 /**
- * Render a LOI card with copy/download buttons.
+ * Render a LOI card with a spacious textarea and copy/download buttons.
  * @param {{ text: string, html: string }} loi
  * @returns {HTMLElement}
  */
 export function renderLOICard(loi) {
   const textArea = createElement(
     'textarea',
-    { readOnly: true, className: 'loi-textarea', rows: 10 },
+    {
+      readOnly: true,
+      rows: 10,
+      className: 'w-full h-64 resize-none border rounded p-4 font-mono text-sm focus:outline-none focus:ring-2 focus:ring-blue-500'
+    },
     loi.text
   );
 
@@ -108,8 +112,8 @@ export function renderLOICard(loi) {
 
   return createElement(
     'div',
-    { className: 'loi-card' },
+    { className: 'loi-card space-y-4 bg-white border rounded-xl p-4' },
     textArea,
-    createElement('div', { className: 'btn-group' }, btnCopyText, btnCopyHTML, btnDownload)
+    createElement('div', { className: 'flex space-x-2' }, btnCopyText, btnCopyHTML, btnDownload)
   );
 }
