@@ -19,7 +19,7 @@ jobs:
 
       - run: |
           npm run build
-          cp index.html dist/index.html
+           cp index.prod.html dist/index.html
 
       - uses: peaceiris/actions-gh-pages@v3
         with:
