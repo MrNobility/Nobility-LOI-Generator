@@ -39,6 +39,12 @@ module.exports = {
     builtins(),
     nodeGlobals(),
     json(),
+    // Resolve .jsx extensions
+    nodeResolve({
+      browser: true,
+      preferBuiltins: false,
+      extensions: ['.mjs', '.js', '.jsx', '.json']
+    }),
     // Use nodeResolve (not resolve) and include .jsx
     nodeResolve({
       browser: true,
