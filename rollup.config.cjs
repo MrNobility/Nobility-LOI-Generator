@@ -45,12 +45,6 @@ module.exports = {
       preferBuiltins: false,
       extensions: ['.mjs', '.js', '.jsx', '.json']
     }),
-    // Use nodeResolve (not resolve) and include .jsx
-    nodeResolve({
-      browser: true,
-      preferBuiltins: false,
-      extensions: ['.mjs', '.js', '.jsx', '.json']
-    }),
     commonjs(),
 
     babel({
