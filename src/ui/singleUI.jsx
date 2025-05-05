@@ -17,6 +17,23 @@ export default function SingleUI() {
   const [output, setOutput] = useState(null);
   const [error, setError] = useState('');
 
+  // Load saved user info from localStorage
+  useEffect(() => {
+    const saved = JSON.parse(localStorage.getItem('loiUser') || '{}');
+    if (saved.name)  setYourName(saved.name);
+    if (saved.phone) setYourPhone(saved.phone);
+    if (saved.email) setYourEmail(saved.email);
+  }, []);
+
+  // Persist user info to localStorage when changed
+  useEffect(() => {
+    localStorage.setItem(
+      'loiUser',
+      JSON.stringify({ name: yourName, phone: yourPhone, email: yourEmail })
+    );
+  }, [yourName, yourPhone, yourEmail]);
+
+  // Initialize offerType and toneOptions
   useEffect(() => {
     const defaultOffer = listOfferTypes()[0]?.id || '';
     setOfferType(defaultOffer);
@@ -29,7 +46,6 @@ export default function SingleUI() {
     setError('');
     setOutput(null);
     try {
-      // sanitize trailing tabs
       const raw = tsvData.trim().replace(/\t+$/gm, '');
       const rows = parseTSV(raw);
       if (!rows.length) throw new Error('No data parsed.');
@@ -53,7 +69,7 @@ export default function SingleUI() {
     <div className="bg-white rounded-xl shadow p-6">
       <h3 className="text-xl font-semibold mb-4">Single Deal</h3>
       <form className="space-y-4 max-w-xl mx-auto" onSubmit={e => e.preventDefault()}>
-        {/* Your Info Fields */}
+        {/* User Signature Info */}
         <div>
           <label htmlFor="single-yourName" className="block font-medium mb-1">Your Name</label>
           <input
@@ -141,18 +157,20 @@ export default function SingleUI() {
         <button
           type="button"
           onClick={handleGenerate}
-          className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
+          className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
         >
           Generate LOI
         </button>
       </form>
 
-      <div className="mt-6 max-w-xl mx-auto">
-        {error && <p className="text-red-600">{error}</p>}
-        {output && (
-          <div className="bg-white border p-4 rounded shadow" dangerouslySetInnerHTML={{ __html: output }} />
-        )}
-      </div>
+      {/* Rendered LOI with spaced paragraphs */}
+      {output && (
+        <div
+          className="mt-6 max-w-xl mx-auto space-y-4"
+          dangerouslySetInnerHTML={{ __html: output }}
+        />
+      )}
+      {error && <p className="text-red-600 mt-4 max-w-xl mx-auto">{error}</p>}
     </div>
   );
 }

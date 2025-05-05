@@ -4,13 +4,13 @@ import { getToneConfig } from './toneRegistry.js';
 
 // Alias mapping for template placeholders to normalized data keys
 const placeholderAliases = {
-  address: 'fulladdress',       // {{address}} → fulladdress
-  price:   'purchaseprice',     // {{price}} → purchaseprice
-  closeescrow: 'closeofescrow', // {{closeEscrow}} → closeofescrow
-  agent: 'pipeline',            // {{agent}} → pipeline (or customize as needed)
-  yourname:   'yourname',       // placeholders for user inputs
-  yourphone:  'yourphone',
-  youremail:  'youremail'
+  address: 'fulladdress',
+  price: 'purchaseprice',
+  closeescrow: 'closeofescrow',
+  agent: 'pipeline',
+  yourname: 'yourname',
+  yourphone: 'yourphone',
+  youremail: 'youremail'
 };
 
 /**
@@ -18,14 +18,11 @@ const placeholderAliases = {
  * and log both raw and normalized keys for debugging.
  */
 function normalizeKeys(obj) {
-  console.log('🔑 Raw data keys:', Object.keys(obj));
   const result = {};
   for (const key in obj) {
     const normalizedKey = key.toLowerCase().replace(/[^a-z0-9]/g, '');
     result[normalizedKey] = obj[key];
   }
-  console.log('🔑 Normalized data keys:', Object.keys(result));
-  console.log('🔑 Sample normalized data:', result);
   return result;
 }
 
@@ -34,6 +31,17 @@ function normalizeKeys(obj) {
  */
 function normalizeTemplateKey(key) {
   return key.toLowerCase().replace(/[^a-z0-9]/g, '');
+}
+
+/**
+ * Convert plain-text paragraphs (separated by empty lines) into HTML paragraphs
+ * preserving single-line breaks as <br>.
+ */
+function toHtmlParagraphs(text) {
+  return text
+    .split(/\n{2,}/g)
+    .map(para => `<p>${para.trim().replace(/\n/g, '<br>')}</p>`)
+    .join('');
 }
 
 /**
@@ -56,6 +64,7 @@ function applyTemplate(template, data) {
  * Generate a Letter of Intent (LOI) in both plain-text and HTML.
  * - Normalizes data keys
  * - Applies subject, greeting, body, closing, signature templates
+ * - Converts plain-text line breaks into HTML paragraphs
  */
 export function generateLOI(data, offerType, toneStyle) {
   if (!data || typeof data !== 'object') {
@@ -63,23 +72,13 @@ export function generateLOI(data, offerType, toneStyle) {
   }
 
   const tone = getToneConfig(offerType, toneStyle);
-
-  // Normalize keys before templating
   const normalizedData = normalizeKeys(data);
 
-  // Apply templates
   const subject   = applyTemplate(tone.subject,   normalizedData);
   const greeting  = applyTemplate(tone.greeting,  normalizedData);
   const body      = applyTemplate(tone.body,      normalizedData);
   const closing   = applyTemplate(tone.closing,   normalizedData);
   const signature = applyTemplate(tone.signature, normalizedData);
-
-  // Debug: inspect post-template values
-  console.log('🔨 Subject:', subject);
-  console.log('🔨 Greeting:', greeting);
-  console.log('🔨 Body:', body);
-  console.log('🔨 Closing:', closing);
-  console.log('🔨 Signature:', signature);
 
   const text = [
     subject,
@@ -92,17 +91,16 @@ export function generateLOI(data, offerType, toneStyle) {
     signature
   ].join('\n');
 
-  const html = `
-    <h1>${subject}</h1>
-    <p>${greeting}</p>
-    <p>${body}</p>
-    <p>${closing}</p>
-    <p>${signature}</p>
-  `.trim();
+  // Build HTML with proper paragraphs
+  const html = [
+    `<h1>${subject}</h1>`,
+    toHtmlParagraphs(greeting),
+    toHtmlParagraphs(body),
+    toHtmlParagraphs(closing),
+    toHtmlParagraphs(signature)
+  ].join('');
 
   return { text, html };
 }
 
-export default {
-  generateLOI
-};
+export default { generateLOI };
