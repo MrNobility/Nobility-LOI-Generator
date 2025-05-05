@@ -1,8 +1,7 @@
 // rollup.config.cjs
 const postcss      = require('rollup-plugin-postcss');
 const json         = require('@rollup/plugin-json');
-// Use the default export for node-resolve
-const resolve = require('@rollup/plugin-node-resolve').nodeResolve;
+const { nodeResolve } = require('@rollup/plugin-node-resolve');
 const commonjs     = require('@rollup/plugin-commonjs');
 const { babel }    = require('@rollup/plugin-babel');
 const terser       = require('@rollup/plugin-terser').default;
@@ -24,24 +23,20 @@ module.exports = {
   plugins: [
     replace({
       preventAssignment: true,
-      'process.env.NODE_ENV': JSON.stringify('development'),
+      'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV || 'development'),
     }),
 
     postcss({
       extensions: ['.css'],
       extract: true,
       minimize: process.env.NODE_ENV === 'production',
-      plugins: [
-        tailwindcss(),
-        autoprefixer(),
-      ]
+      plugins: [tailwindcss(), autoprefixer()]
     }),
 
     builtins(),
     nodeGlobals(),
     json(),
-    // Resolve .jsx extensions
-    resolve({
+    nodeResolve({
       browser: true,
       preferBuiltins: false,
       extensions: ['.mjs', '.js', '.jsx', '.json']
@@ -51,7 +46,7 @@ module.exports = {
     babel({
       babelHelpers: 'bundled',
       presets: ['@babel/preset-react'],
-      extensions: ['.js', '.jsx'],
+      extensions: ['.js', '.jsx', '.mjs'],
       exclude: 'node_modules/**',
     }),
 
