@@ -39,7 +39,11 @@ module.exports = {
     builtins(),
     nodeGlobals(),
     json(),
-    nodeResolve({ browser: true, preferBuiltins: false }),
+    resolve({
+      browser: true,
+      preferBuiltins: false,
+      extensions: ['.mjs', '.js', '.jsx', '.json']
+    }),
     commonjs(),
 
     babel({
