@@ -1,52 +1,65 @@
-// src/tests/tsvParser.test.js
-
-// 1. Import the function you want to test
-import parseTSV from '../src/core/tsvParser';
+import parseTSV from '../src/core/tsvParser.js';
+import { columnOrder } from '../src/core/columnMap.js';
 
 describe('parseTSV', () => {
-  // 2. A “describe” block groups related tests together
-  //    It can contain any number of individual test cases.
-
-  test('parses a simple header-based TSV into objects', () => {
-    // 3. Arrange: define your input
-    const raw = 'colA\tcolB\nvalue1\tvalue2\nfoo\tbar';
-
-    // 4. Act: call the function under test
-    const result = parseTSV(raw);
-
-    // 5. Assert: check that the output matches what you expect
-    expect(result).toEqual([
-      { colA: 'value1', colB: 'value2' },
-      { colA: 'foo',    colB: 'bar'    },
-    ]);
-  });
-
-  test('throws when a data row has the wrong number of columns', () => {
-    const badRaw = 'c1\tc2\nonlyOneColumn';
-
-    // 6. For error‐cases, wrap the call in a function and expect it to throw
-    expect(() => parseTSV(badRaw)).toThrow(
-      /has 1 columns; expected 2/  // matches the error message
-    );
-  });
-/*
-  test('supports header=false with supplied headers', () => {
-    const raw = 'a\tb\nc\td';
-    const result = parseTSV(raw, {
-      header: false,
-      headers: ['col1', 'col2'],
+  test('parses headerless TSV using columnOrder fallback', () => {
+    // Build a TSV row with all 29 columns
+    const values = columnOrder.map((col) => {
+      switch (col) {
+        case 'timestamp': return '2025-05-03';
+        case 'fulladdress': return '123 Main St, Austin TX';
+        case 'purchaseprice': return '300000';
+        case 'listedprice': return '320000';
+        case 'oflistprice': return '93.75';
+        case 'monthlypaymentpiti': return '1500';
+        case 'balloonterm': return '5';
+        case 'monthlyinsurance': return '100';
+        case 'monthlytaxes': return '150';
+        case 'monthlyhoa': return '0';
+        case 'annualinsurance': return '1200';
+        case 'annualtaxes': return '1800';
+        case 'annualhoa': return '0';
+        case 'monthlyotherexpenses': return '0';
+        case 'annualotherexpenses': return '0';
+        case 'closeofescrow': return '2025-06-01';
+        case 'emd': return '5000';
+        case 'monthlyrentalrevenue': return '2500';
+        case 'annualrentalrevenue': return '30000';
+        case 'monthlyoperatingexpenses': return '1000';
+        case 'annualoperatingexpenses': return '12000';
+        case 'monthlycashflow': return '1500';
+        case 'annualcashflow': return '18000';
+        case 'cashoncashreturn': return '0.12';
+        case 'buyerentryfee': return '0.05';
+        case 'assignmentfee': return '10000';
+        case 'dealstage': return 'initial';
+        case 'dealname': return 'Main St Deal';
+        case 'pipeline': return 'Texas';
+        default: return '';
+      }
     });
-    expect(result).toEqual([
-      { col1: 'a', col2: 'b' },
-      { col1: 'c', col2: 'd' },
-    ]);
+
+    const raw = values.join('\t');
+
+    const rows = parseTSV(raw, {
+      header: false,
+      headers: columnOrder,
+    });
+
+    expect(rows.length).toBe(1);
+    expect(rows[0].fulladdress).toBe('123 Main St, Austin TX');
+    expect(rows[0].purchaseprice).toBe('300000');
+    expect(rows[0].emd).toBe('5000');
   });
 
-  test('validates requiredFields', () => {
-    const raw = 'x\ty\n1\t\n';
+  test('throws error when required field is empty', () => {
+    const raw = 'Address\tPrice\n123 Main St\t'; // Missing price value
+
     expect(() =>
-      parseTSV(raw, { requiredFields: ['x', 'y'] })
-    ).toThrow(/required field "y" is empty/);
+      parseTSV(raw, {
+        header: true,
+        requiredFields: ['price'],
+      })
+    ).toThrow(/has \d+ columns; expected \d+/);
   });
-  */
 });

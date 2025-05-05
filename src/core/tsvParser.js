@@ -1,5 +1,7 @@
 // src/core/tsvParser.js
 
+import { columnOrder } from './columnMap.js';
+
 /**
  * Parse a TSV (tab-separated values) string into an array of row objects.
  *
@@ -34,19 +36,17 @@ export default function parseTSV(raw, opts = {}) {
     return [];
   }
 
-  // Determine headers and data lines
+  // Detect whether to use header row or fallback to columnMap
   let columnNames;
   let dataLines;
-  if (header) {
+
+  const looksLikeHeader = lines[0].toLowerCase().includes('address') || lines[0].toLowerCase().includes('purchase price');
+
+  if (header && looksLikeHeader) {
     columnNames = lines[0].split('\t').map(h => h.trim());
     dataLines = lines.slice(1);
   } else {
-    if (!Array.isArray(suppliedHeaders) || suppliedHeaders.length === 0) {
-      throw new Error(
-        'TSV Parser error: no header row and no `headers` option provided.'
-      );
-    }
-    columnNames = suppliedHeaders;
+    columnNames = suppliedHeaders || columnOrder;
     dataLines = lines;
   }
 
@@ -55,32 +55,26 @@ export default function parseTSV(raw, opts = {}) {
     const values = line.split('\t');
     if (values.length !== columnNames.length) {
       throw new Error(
-        `TSV Parser error: line ${rowIndex + (header ? 2 : 1)} has ${
-          values.length
-        } columns; expected ${columnNames.length}.`
+        `TSV Parser error: line ${rowIndex + (header ? 2 : 1)} has ${values.length} columns; expected ${columnNames.length}.`
       );
     }
 
-    // Build row object
     const row = {};
     columnNames.forEach((col, i) => {
-      row[col] = values[i].trim();
+      const normalized = col.toLowerCase().replace(/[^a-z0-9]/g, '');
+      row[normalized] = values[i].trim();
     });
 
     // Validate required fields
     requiredFields.forEach(field => {
       if (!(field in row)) {
         throw new Error(
-          `TSV Parser error: required field "${field}" missing in line ${
-            rowIndex + (header ? 2 : 1)
-          }.`
+          `TSV Parser error: required field "${field}" missing in line ${rowIndex + (header ? 2 : 1)}.`
         );
       }
       if (row[field] === '') {
         throw new Error(
-          `TSV Parser error: required field "${field}" is empty in line ${
-            rowIndex + (header ? 2 : 1)
-          }.`
+          `TSV Parser error: required field "${field}" is empty in line ${rowIndex + (header ? 2 : 1)}.`
         );
       }
     });

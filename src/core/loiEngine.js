@@ -2,6 +2,15 @@
 
 import { getToneConfig } from './toneRegistry.js';
 
+function normalizeKeys(obj) {
+  const result = {};
+  for (const key in obj) {
+    const normalized = key.toLowerCase().replace(/[^a-z0-9]/gi, '');
+    result[normalized] = obj[key];
+  }
+  return result;
+}
+
 /**
  * Simple template replacer: replaces {{key}} in the template
  * with the corresponding value from data (stringified).
@@ -29,28 +38,23 @@ export function generateLOI(data, offerType, toneStyle) {
   if (!data || typeof data !== 'object') {
     throw new Error('generateLOI: input must be a non-empty object');
   }
+
   const tone = getToneConfig(offerType, toneStyle);
 
-  // Apply templates
-  const subject  = applyTemplate(tone.subject,  data);
-  const greeting = applyTemplate(tone.greeting, data);
-  const body     = applyTemplate(tone.body,     data);
-  const closing  = applyTemplate(tone.closing,  data);
-  const signature= applyTemplate(tone.signature,data);
+  // 🔥 Normalize keys before templating
+  const normalizedData = normalizeKeys(data);
 
-  // Assemble plain-text
+  // Apply templates
+  const subject   = applyTemplate(tone.subject,   normalizedData);
+  const greeting  = applyTemplate(tone.greeting,  normalizedData);
+  const body      = applyTemplate(tone.body,      normalizedData);
+  const closing   = applyTemplate(tone.closing,   normalizedData);
+  const signature = applyTemplate(tone.signature, normalizedData);
+
   const text = [
-    subject,
-    '',
-    greeting,
-    '',
-    body,
-    '',
-    closing,
-    signature
+    subject, '', greeting, '', body, '', closing, signature
   ].join('\n');
 
-  // Assemble HTML (simple tags; you can expand with styling later)
   const html = `
     <h1>${subject}</h1>
     <p>${greeting}</p>
@@ -61,6 +65,7 @@ export function generateLOI(data, offerType, toneStyle) {
 
   return { text, html };
 }
+
 
 export default {
   generateLOI

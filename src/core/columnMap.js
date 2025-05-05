@@ -1,0 +1,35 @@
+export const columnOrder = [
+  'timestamp',
+  'fulladdress',
+  'purchaseprice',
+  'listedprice',
+  'oflistprice',
+  'monthlypaymentpiti',
+  'balloonterm',
+  'monthlyinsurance',
+  'monthlytaxes',
+  'monthlyhoa',
+  'annualinsurance',
+  'annualtaxes',
+  'annualhoa',
+  'monthlyotherexpenses',
+  'annualotherexpenses',
+  'closeofescrow',
+  'emd',
+  'monthlyrentalrevenue',
+  'annualrentalrevenue',
+  'monthlyoperatingexpenses',
+  'annualoperatingexpenses',
+  'monthlycashflow',
+  'annualcashflow',
+  'cashoncashreturn',
+  'buyerentryfee',
+  'assignmentfee',
+  'dealstage',
+  'dealname',
+  'pipeline',
+];
+
+export const columnMap = Object.fromEntries(
+  columnOrder.map((col) => [col.replace(/[^a-z]/gi, '').toLowerCase(), col])
+);

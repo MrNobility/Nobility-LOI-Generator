@@ -2,67 +2,81 @@
 
 exports[`SingleUI component matches snapshot 1`] = `
 <div>
-  <div>
-    <h3>
+  <div
+    class="bg-white rounded-xl shadow p-6 mb-8"
+  >
+    <h3
+      class="text-xl font-semibold mb-4"
+    >
       Single Deal
     </h3>
     <form
-      class="single-form"
+      class="space-y-4"
     >
-      <label
-        for="single-offerType"
-      >
-        Offer Type
-      </label>
-      <select
-        id="single-offerType"
-        name="single-offerType"
-      >
-        <option
-          value="cash"
+      <div>
+        <label
+          class="block font-medium mb-1"
+          for="single-offerType"
         >
-          Cash Offer
-        </option>
-        <option
-          value="sellerFinance"
+          Offer Type
+        </label>
+        <select
+          class="w-full border rounded p-2"
+          id="single-offerType"
         >
-          Seller Finance Offer
-        </option>
-      </select>
-      <label
-        for="single-toneStyle"
-      >
-        Tone Style
-      </label>
-      <select
-        id="single-toneStyle"
-        name="single-toneStyle"
-      >
-        <option
-          value="professional"
+          <option
+            value="cash"
+          >
+            Cash Offer
+          </option>
+          <option
+            value="sellerFinance"
+          >
+            Seller Finance Offer
+          </option>
+        </select>
+      </div>
+      <div>
+        <label
+          class="block font-medium mb-1"
+          for="single-toneStyle"
         >
-          professional
-        </option>
-      </select>
-      <label
-        for="single-tsvData"
-      >
-        Deal Data (TSV)
-      </label>
-      <textarea
-        class="tsv-input"
-        id="single-tsvData"
-        name="single-tsvData"
-        placeholder="Paste single-row TSV here (headers on first line)"
-        rows="8"
-      />
+          Tone Style
+        </label>
+        <select
+          class="w-full border rounded p-2"
+          id="single-toneStyle"
+        >
+          <option
+            value="professional"
+          >
+            professional
+          </option>
+        </select>
+      </div>
+      <div>
+        <label
+          class="block font-medium mb-1"
+          for="single-tsvData"
+        >
+          Deal Data (TSV)
+        </label>
+        <textarea
+          class="w-full border rounded p-2 font-mono"
+          id="single-tsvData"
+          placeholder="Paste single-row TSV here (headers on first line)"
+          rows="8"
+        />
+      </div>
       <button
+        class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
         type="button"
       >
         Generate LOI
       </button>
     </form>
     <div
+      class="mt-6"
       id="single-loiResult"
     />
   </div>

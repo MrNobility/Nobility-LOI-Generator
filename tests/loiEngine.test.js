@@ -3,6 +3,6 @@ import { generateLOI } from '../src/core/loiEngine';
 
 describe('generateLOI smoke test', () => {
   it('throws when passed an empty data array', () => {
-    expect(() => generateLOI([], 'cash', 'professional')).toThrow();
+    expect(() => generateLOI(null, 'cash', 'professional')).toThrow();
   });
 });

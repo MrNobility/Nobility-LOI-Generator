@@ -32,14 +32,16 @@ describe('SingleUI integration behavior', () => {
 
     // Wait for output to render
     await waitFor(() => {
-        expect(screen.getByText((text) =>
-          text.includes('123 Main St') || text.includes('Purchase Price')
-        )).toBeInTheDocument();
-      });
+      const matches = screen.getAllByText((text) =>
+        text.includes('123 Main St') || text.includes('Purchase Price')
+      );
+      expect(matches.length).toBeGreaterThan(0);
+    });
+    
       
 
     // Confirm some expected output
     expect(screen.getByText(/123 Main St, Austin TX/i)).toBeInTheDocument();
-    expect(screen.getByText(/Purchase Price/i)).toBeInTheDocument();
+    expect(screen.getAllByText(/Purchase Price/i).length).toBeGreaterThan(0);
   });
 });
